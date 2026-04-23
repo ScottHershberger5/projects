@@ -1,18 +1,23 @@
 import http.client
 import requests
+import json
 
-# conn = http.client.HTTPSConnection("v1.american-football.api-sports.io")
+url = "https://v1.american-football.api-sports.io/teams?id=32" #1-32
+
+payload={}
 
 headers = {
-    'x-apisports-key': "F7gHQGrguyeXngQrKE5LsD41iB6MeELl" #find a way to not hardcode this
-    }
+  'x-apisports-key': 'fd6fbe35c28ce3526d4bb21d4d5246ba',
+}
 
-# conn.request("GET", "/leagues", headers=headers)
-response = requests.get(("v1.american-football.api-sports.io", "/leagues", headers=headers))
+response = requests.request("GET", url,headers=headers, data=payload)
+response = response.json()
+print(f"id = 32: {response['response'][0]['name']}")
 
-# res = conn.getresponse()
-# data = res.read()
+# want to loop through it 32 times to get all the teams and maybe cache them probably not tho
 
-# print(data.decode("utf-8"))
-
-print(response)
+# print(response['response'][0]['established']) #gives you the year in which a team was established
+# for i in range(0,10):
+#     url = (f"https://v1.american-football.api-sports.io/teams?id={i}")
+#     response = requests.request("GET", url,headers=headers, data=payload)
+    
