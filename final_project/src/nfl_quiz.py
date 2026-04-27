@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 load_dotenv()
  
 ### notes ###
-# Used ai for .env,  tests , 
+# Used ai for .env,  tests , conftest.py
  
  
 def get_team_data() -> list[dict]:
