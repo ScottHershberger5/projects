@@ -1,0 +1,14 @@
+README.md — required contents
+1. What the project does (2–3 sentences, plain English)?
+    - My project is designed to help nfl fans become more knowledgeable about theire favorite team. It takes the users favorite team, grabs the teams basic data from an API, and then quizzes the user on their teams info.
+2. How to install dependencies and run it (clear enough that I can follow it without asking you questions)?
+    - In a command line, navigate into the final_project directory. Enter in the command "pip install -r requirements.txt". Also from the final_project directory, enter in the command line "python src/nfl_api_quiz/nfl_quiz.py".
+3. Which data structures and algorithms you used, and where in the code they live?
+    - I used a Queue data structure to store the users answers to the questions I ask, and the correct answers that I retrieved from the API. I also used hash tables in the form of python dictionarys. 
+    - I have four main algorithims that I use in my code. A get_team_data (line 20) function that returns a list of dictionarys, one dictionary for each of the 32 teams. ask_questions (line 30) asks the user what their favorite team is, and then asks them five questions about their team, it then stores the users answers and the correct answer into a queue. answer_check_grade (line 50) reviews the users answers against the correct answer by popping off of the queue, it keeps track of how many questions the user got right and provides a percentage grade for the quiz aswell. Lastly, if the user wants to, review_answers (line 65) will go over the users answers and correct the user on any questions they got wrong. All these functions are called in my "if __name__ == "__main__":" function.
+4. What's working and what isn't?
+    - Every part of my code is working. The only part I think could be a problem is the API only allows 100 requests per day, so if more then 100 quizzes are done, the API would stop my code from being able to access data.
+5. An AI Use section: which tools you used (ChatGPT, Copilot, Claude, Cursor, etc.) and what they helped with?
+    - I used ai for help with: not hardcoding my api key into my code (.env), test cases, my conftest.py file. I used claude on the web and the mistral vibe coding agent to assist me in those parts of my code. 
+6. External API?
+    - I used an API called "API sports" in my project. They allow you to make a free account, get a free api key and you can request data from 12 different sports. Like I said before, there is a limit on how many requests you can do per day, but everytime you run my code I only request once so you could run my code up to 100 times in a day before you hit the limit.

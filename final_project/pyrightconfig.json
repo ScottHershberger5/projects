@@ -1,4 +1,4 @@
 {
     "pythonVersion": "3.12",
-    "extraPaths": ["src"]
+    "extraPaths": ["src/nfl_api_quiz"]
 }

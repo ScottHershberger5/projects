@@ -5,8 +5,7 @@
 import pytest
 from unittest.mock import patch, MagicMock
 from queue import Queue
-from nfl_quiz import questions, answer_check_grade, review_answers, get_team_data
- 
+from nfl_quiz import ask_questions, answer_check_grade, review_answers, get_team_data 
  
 # Fake team data used across all tests — no real API calls needed
 @pytest.fixture
@@ -64,7 +63,7 @@ def test_all_wrong_answers():
 # Test 3: questions() returns an empty queue if the team name is not found
 def test_team_not_found(fake_teams):
     with patch("builtins.input", side_effect=["Faketeam XYZ"]):
-        result = questions(fake_teams)
+        result = ask_questions(fake_teams)
  
     assert result.empty()
  
@@ -88,6 +87,6 @@ def test_get_team_data_returns_list(mock_api):
 ])
 def test_team_name_variations(user_input, fake_teams):
     with patch("builtins.input", side_effect=[user_input, "Foxborough", "Bill Belichick", "Robert Kraft", "Gillette Stadium", "1960"]):
-        result = questions(fake_teams)
+        result = ask_questions(fake_teams)
  
     assert not result.empty()

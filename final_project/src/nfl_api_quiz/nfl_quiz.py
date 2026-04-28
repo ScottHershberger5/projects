@@ -7,11 +7,15 @@ import requests
 from queue import Queue
 from dotenv import load_dotenv
  
-load_dotenv()
+load_dotenv() # used to not hardcode my API key into the code, its in the .env file
  
 ### notes ###
 # Used ai for .env,  tests , conftest.py
- 
+# To Do:
+#   - Readme.md (AI use section as well)
+#   - Presentation
+
+
  
 def get_team_data() -> list[dict]:
     api_key = os.getenv("API_KEY", "")
@@ -22,12 +26,12 @@ def get_team_data() -> list[dict]:
     return response.get('response', []) #a list of all the teams and their data
  
  
-#TYPE HINTS / ARGUMENTS
-def questions(teams: list[dict]) -> Queue[tuple[str, str]]:
-    favorite_team = input("What is your favorite NFL team? ")
+
+def ask_questions(teams: list[dict]) -> Queue[tuple[str, str]]:
+    users_favorite_team = input("What is your favorite NFL team? ")
     answers_queue: Queue[tuple[str, str]] = Queue() # makes a queue where were gonna store the correct answer and the users answer
     for team in teams:
-        if favorite_team.lower() in team['name'].lower() or team['name'].lower() in favorite_team.lower():          
+        if users_favorite_team.lower() in team['name'].lower() or team['name'].lower() in users_favorite_team.lower():          
             print(f"\nQuestions for the {team['name']}:")
             # puts a tuple (correct answer, users answer) into a queue (answers_queue)
             answers_queue.put((team['city'], input(f"What city are the {team['name']} located in? : ")))
@@ -37,21 +41,23 @@ def questions(teams: list[dict]) -> Queue[tuple[str, str]]:
             answers_queue.put((team['established'],input(f"What year was the {team['name']} football team established? : ")))
             break
     else:
-        print(f"Team '{favorite_team}' not found. Or you mispelled the team name")
+        print(f"Team '{users_favorite_team}' not found. Or you mispelled the team name")
     return answers_queue
  
  
-# Could keep track of a users incorrect answers and ask them is they want to review them
+
+
 def answer_check_grade(answers_queue: Queue[tuple[str, str]]) -> tuple[int, float, Queue[tuple[str, str, bool]]]:
     correct_counter = 0
     answers_wrong_right: Queue[tuple[str, str, bool]] = Queue() # stores a queue of tuples (correct answer, user answer, True = Correct/False = wrong)
+    
     for _ in range(answers_queue.qsize()):
-        correct_a, user_a = answers_queue.get()
-        if correct_a == user_a:
+        correct_answer, user_answer = answers_queue.get()
+        if str(correct_answer) == user_answer:
             correct_counter += 1
-            answers_wrong_right.put((correct_a, user_a, True))
+            answers_wrong_right.put((correct_answer, user_answer, True))
         else:
-            answers_wrong_right.put((correct_a, user_a, False))
+            answers_wrong_right.put((correct_answer, user_answer, False))
     
     percent_correct: float = correct_counter / 5 * 100
  
@@ -60,26 +66,22 @@ def answer_check_grade(answers_queue: Queue[tuple[str, str]]) -> tuple[int, floa
  
 def review_answers(answers: Queue[tuple[str, str, bool]]) -> None:
     for _ in range(answers.qsize()):
-        correct_a, user_a, is_correct = answers.get()
+        correct_answer, user_answer, is_correct = answers.get()
         if is_correct:
-            print(f"Correct! Your answer: {user_a}")
+            print(f"Correct! Your answer: {user_answer}")
         else:
-            print(f"Wrong! Your answer: {user_a} | Correct answer: {correct_a}")
+            print(f"Wrong! Your answer: {user_answer} | Correct answer: {correct_answer}")
  
     
 if __name__ == "__main__":
-    team_data = get_team_data()
-    answers_queue = questions(team_data)
-    #maybe ask the user here if they even want to check their answers
+    api_team_data = get_team_data()
+    answers_queue = ask_questions(api_team_data)
     num_correct, grade_perc, answers_wrong_right = answer_check_grade(answers_queue)
     print(f"You got {num_correct}, with a overall score of {grade_perc} correct!")
     
-    #have to implement the reviewing the answers
-    review = input("Would you like to review your answers? (yes/y/no/n): ")
+    # asks the user if they even want to review their answers
+    user_review_yes_or_no = input("Would you like to review your answers? (yes/y/no/n): ")
 
-    if review.strip().lower() in ("yes", "y"):
-        review_answers(answers_wrong_right)
-    elif review.strip().lower() in ("no", "n"):
-        pass
-    else:
-        print("Im sorry you didnt answer with a valid input.")
+    if user_review_yes_or_no.strip().lower() in ("yes", "y"): review_answers(answers_wrong_right)
+    elif user_review_yes_or_no.strip().lower() in ("no", "n"): pass
+    else: print("Im sorry you didnt answer with a valid input.")
