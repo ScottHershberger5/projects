@@ -7,11 +7,11 @@ import requests
 from queue import Queue
 from dotenv import load_dotenv
  
-load_dotenv() # used to not hardcode my API key into the code, its in the .env file
+load_dotenv() # used to not hardcode my API key into the code, its in my .env file, doesnt get saved to git hub
  
 ### notes ###
 # Used ai for .env,  tests , conftest.py
-# If it doesnt work for the live demo RESET API KEY and add .env file
+# for LIVE DEMO add .env file and reset my api key
 
 
 
