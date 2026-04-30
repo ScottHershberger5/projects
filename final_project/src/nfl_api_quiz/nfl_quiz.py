@@ -11,18 +11,16 @@ load_dotenv() # used to not hardcode my API key into the code, its in the .env f
  
 ### notes ###
 # Used ai for .env,  tests , conftest.py
-# If it doesnt work for the live demo RESET API KEY
+# If it doesnt work for the live demo RESET API KEY and add .env file
 
 
 
  
 def get_team_data() -> list[dict]:
     api_key = os.getenv("API_KEY", "")
-    print(f"API key loaded: {api_key}")
     headers = {'x-apisports-key': api_key}
     # Fetch all teams in a single request
     url = "https://v1.american-football.api-sports.io/teams?league=1&season=2024" #gets the whole league from the 2024 season, 2025 and 26 are paid versions
-    response = requests.get(url, headers=headers).json()
     response = requests.get(url, headers=headers).json()
     return response.get('response', []) #a list of all the teams and their data
  
@@ -31,7 +29,6 @@ def get_team_data() -> list[dict]:
 def ask_questions(teams: list[dict]) -> Queue[tuple[str, str]]:
     users_favorite_team = input("What is your favorite NFL team? ")
     answers_queue: Queue[tuple[str, str]] = Queue() # makes a queue where were gonna store the correct answer and the users answer
-    print(teams)
     for team in teams:
         if users_favorite_team.lower() in team['name'].lower() or team['name'].lower() in users_favorite_team.lower():          
             print(f"\nQuestions for the {team['name']}:")
